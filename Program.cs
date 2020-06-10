@@ -5,6 +5,16 @@ namespace InfixToPostfix
 {
     class Program
     {
+        static Dictionary<char, int> precedence = new Dictionary<char, int>
+        {
+            {'(', 0 }, //we don't want anything to pop '(' that is why it is 0
+            {'^', 3 },
+            {'*', 2 },
+            {'/', 2 },
+            {'+', 1 },
+            {'-', 1 }
+        };
+
         static void Main(string[] args)
         {
             Stack<char> myStack = new Stack<char>();
@@ -40,7 +50,7 @@ namespace InfixToPostfix
                             {
                                 postfixString += myStack.Pop();
                             }
-                            myStack.Pop(); //to remove '('
+                            myStack.Pop(); //To remove '('
                         }
                         else
                         {
@@ -53,7 +63,7 @@ namespace InfixToPostfix
                     }
                 }
 
-                //append what is left inside the stack to postfixString
+                //Append what is left inside the stack to postfixString
                 while (myStack.Count > 0)
                 {
                     postfixString += myStack.Pop();
@@ -68,20 +78,10 @@ namespace InfixToPostfix
 
         static bool HasHigherOrEqualPrec(char first, char second)
         {
-            //exponent is right to left that is why we don't want it to pop itself
+            //Exponent is right to left that is why we don't want it to pop itself
             //without this if statement 2^3^4 would be 23^4^ and this is wrong
             if (first == '^' && second == '^')
                 return false;
-
-            Dictionary<char, int> precedence = new Dictionary<char, int>
-            {
-                {'(', 0 }, //we don't want anything to pop '(' that is why it is 0
-                {'^', 3 },
-                {'*', 2 },
-                {'/', 2 },
-                {'+', 1 },
-                {'-', 1 }
-            };
 
             return precedence[first] >= precedence[second];
         }
